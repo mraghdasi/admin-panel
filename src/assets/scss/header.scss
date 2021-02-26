@@ -1,0 +1,19 @@
+@font-face {
+    src: url('../fonts/iransans.ttf');
+    font-family: 'iransans';
+}
+
+body,
+html {
+    direction: rtl;
+    text-align: right;
+    font-family: iransans;
+}
+
+.headers {
+    color: white !important;
+}
+
+.content {
+    padding: 20px 80px;
+}
