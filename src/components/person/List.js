@@ -1,38 +1,37 @@
 import React, { Component } from "react"
-import { Table } from "antd"
 import axios from "axios"
+import AntTable from "../utils/Table"
 
 class List extends Component {
     state = {
         users: [],
+        load: true,
     }
 
     componentDidMount() {
-        axios("https://jsonplaceholder.typicode.com/users").then((res) =>
-            this.setState({ users: res.data }),
-        )
+        axios("https://jsonplaceholder.typicode.com/users")
+            .then((res) => this.setState({ users: res.data }))
+            .finally(() => {
+                this.setState({ load: false })
+            })
     }
 
     columns = [
         {
             title: "Name",
-            dataIndex: "name",
             key: "name",
         },
         {
             title: "UserName",
-            dataIndex: "username",
             key: "username",
         },
         {
             title: "Address",
-            dataIndex: "address",
             key: "address",
             render: (feild, record) => (
                 <span>{`${feild.city} ${feild.suite}`}</span>
             ),
         },
-
         {
             title: "Action",
             key: "action",
@@ -57,7 +56,16 @@ class List extends Component {
     render() {
         return (
             <div>
-                <Table columns={this.columns} dataSource={this.state.users} />
+                <AntTable
+                    columns={this.columns}
+                    data={this.state.users}
+                    loading={this.state.load}
+                    pagination={{
+                        defaultPageSize: 4,
+                        // showSizeChanger: true,
+                        // pageSizeOptions: ["10", "20", "30"],
+                    }}
+                />
             </div>
         )
     }
