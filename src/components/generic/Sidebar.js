@@ -5,10 +5,6 @@ import { LogoutOutlined, HomeOutlined, UserAddOutlined, UnorderedListOutlined } 
 
 function Sidebar(props) {
   const { isAuthUser } = props;
-  const handleClick = (e) => {
-    console.log(props);
-    console.log('click ', e);
-  };
 
   const location = useLocation();
   let selectedItem = location.pathname !== '/' ? location.pathname.substring(1) : '/';
@@ -19,7 +15,7 @@ function Sidebar(props) {
   };
 
   return (
-    <Menu onSelect={handleClick} style={{ width: '100%', height: '100vh' }} defaultSelectedKeys={[selectedItem]} mode='inline'>
+    <Menu style={{ width: '100%', height: '100vh' }} defaultSelectedKeys={[selectedItem]} mode='inline'>
       <Menu.Item key='dashboard'>
         <HomeOutlined />
         <Link to='/'>داشبورد مدیریتی</Link>

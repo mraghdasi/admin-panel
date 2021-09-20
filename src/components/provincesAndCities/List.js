@@ -5,7 +5,10 @@ import axios from 'axios';
 import AntTable from '../utils/Table';
 import HeaderTitle from '../generic/HeaderTitle';
 import { Input, Space, Button } from 'antd';
-import { DeleteOutlined, EyeOutlined, EditOutlined } from '@ant-design/icons';
+import { EyeOutlined } from '@ant-design/icons';
+import Create from './Create';
+import Edit from './Edit';
+import Remove from './Remove';
 const { Search } = Input;
 
 const List = (props) => {
@@ -47,10 +50,6 @@ const List = (props) => {
     };
   }, []);
 
-  const remove = (id) => {
-    props.setFilterProvinces(props.provincesFilter.filter((item) => item.id !== id));
-  };
-
   let columns = [
     {
       title: 'id',
@@ -69,7 +68,6 @@ const List = (props) => {
           onClick={(e) => {
             const filteredCities = props.cities.filter(({ provinceTitle: id1 }) => record.title === id1);
             props.setProvincesFilterCities(filteredCities);
-            console.log(filteredCities);
             setIsCity(true);
           }}>
           <EyeOutlined style={{ color: '#40a9ff' }} />
@@ -80,12 +78,8 @@ const List = (props) => {
       title: 'ویرایش',
       key: 'edit_action',
       render: (field, record) => (
-        <span
-          style={{ fontSize: '16px', cursor: 'pointer' }}
-          onClick={(e) => {
-            remove(record.id);
-          }}>
-          <EditOutlined style={{ color: '#40a9ff' }} />
+        <span >
+          <Edit record={record} />
         </span>
       ),
     },
@@ -93,15 +87,8 @@ const List = (props) => {
       title: 'حذف',
       key: 'Delete_action',
       render: (field, record) => (
-        <span
-          style={{ fontSize: '16px', cursor: 'pointer' }}
-          onClick={(e) => {
-            let isRemove = window.confirm('آیا مطمئن هستید تا پاک کنید؟');
-            if (isRemove) {
-              remove(record.id);
-            }
-          }}>
-          <DeleteOutlined style={{ color: 'red' }} />
+        <span>
+          <Remove record={record} /> 
         </span>
       ),
     },
@@ -116,7 +103,6 @@ const List = (props) => {
 
     if (citiesFilterFromProvinces) {
       let citiesFilterFromProvincesed = citiesFilterFromProvinces.filter((item) => item.title.includes(e.target.value));
-      console.log(citiesFilterFromProvincesed);
       setSearchCities(citiesFilterFromProvincesed);
     }
   };
@@ -125,15 +111,13 @@ const List = (props) => {
 
   return (
     <div>
-      <HeaderTitle title={props.title} />
+      <HeaderTitle title={!isCity ? 'لیست استان‌ها' : 'لیست شهر ها'} />
       <Space style={{ marginBottom: '30px' }} direction='vertical'>
         <Search placeholder='جست‌و‌جو کنید ...' allowClear enterButton='جست‌وجو' size='large' onChange={onSearch} />
       </Space>
 
       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
-        <Button type='primary' size={'middle'}>
-          ایجاد {!isCity ? 'استان' : 'شهر'}
-        </Button>
+        <Create isCity={isCity} />
 
         {isCity && (
           <Button type='primary' size={'middle'} onClick={returnToProvinces}>

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Form, Input, Button, Spin } from 'antd';
 import HeaderTitle from '../generic/HeaderTitle';
 import { connect } from 'react-redux';
@@ -23,19 +23,19 @@ const Login = (props) => {
     };
 
     axios(config)
-      .then((res) => {
-        console.log(res.data);
-        if (res.data.isSuccess) {
+      .then(({ data }) => {
+        if (data.isSuccess) {
           setErrorMsg('');
-          props.setValues(res.data.data);
-          cookie.set('token', `${props.response.token_type} ${props.response.access_token}`, { expires: props.response.expires_in });
+          cookie.set('user', values.username,{ expires: data.data.expires_in })
+          cookie.set('token', `${data.data.token_type} ${data.data.access_token}`, { expires: data.data.expires_in });
+          props.setValues(data.data);
+        } else {
+          setLoading(false);
         }
       })
       .catch(function (error) {
         console.log(error.response.data);
         setErrorMsg(error.response.data.Message);
-      })
-      .finally(() => {
         setLoading(false);
       });
   };
@@ -96,14 +96,10 @@ const Login = (props) => {
   );
 };
 
-const mapStateToProps = (state) => ({
-  response: state.login,
-});
-
 const mapDispatchToProps = (dispatch) => ({
-  setValues: (data) => {
+  setValues: function (data) {
     dispatch({ type: 'LOGIN', payload: data });
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default connect(null, mapDispatchToProps)(Login);

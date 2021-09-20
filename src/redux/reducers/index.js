@@ -3,11 +3,10 @@ import cookie from 'js-cookie';
 const reducer = (
   state = {
     isAuthUser: !!cookie.get('token'),
+    user: cookie.get('user') || {},
   },
   action
 ) => {
-  console.log(state, action);
-
   switch (action.type) {
     case 'LOGIN':
       return { ...state, isAuthUser: true, login: action.payload };
@@ -23,6 +22,7 @@ const reducer = (
       return { ...state, searchCities: action.payload };
     case 'LOGOUT':
       cookie.remove('token');
+      cookie.remove('user');
       return { ...state, isAuthUser: false };
 
     default:
