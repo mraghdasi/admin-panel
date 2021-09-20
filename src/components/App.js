@@ -1,5 +1,5 @@
 import 'antd/dist/antd.css';
-import { Switch } from 'react-router-dom';
+import { Switch, Redirect } from 'react-router-dom';
 import { Layout } from 'antd';
 import Header from './generic/Header';
 import Sidebar from './generic/Sidebar';
@@ -27,6 +27,7 @@ function App() {
             <AuthRoute path="/" exact render={() => (<Dashboard title="پنل مدیریتی" />)} />
             <AuthRoute path="/login" render={() => (<Login title="صفحه ورود" />)} type="guest" />
             <AuthRoute path="/province"  render={() => (<Province title="لیست استان‌ها" />)}  type="private" />
+            <AuthRoute render={() => <Redirect to={{pathname: "/"}} />} />
             </Switch>
           </Content>
         </Layout>

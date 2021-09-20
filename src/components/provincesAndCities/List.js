@@ -68,6 +68,7 @@ const List = (props) => {
           onClick={(e) => {
             const filteredCities = props.cities.filter(({ provinceTitle: id1 }) => record.title === id1);
             props.setProvincesFilterCities(filteredCities);
+            props.setSearchCities(filteredCities);
             setIsCity(true);
           }}>
           <EyeOutlined style={{ color: '#40a9ff' }} />
@@ -128,7 +129,7 @@ const List = (props) => {
 
       <AntTable
         columns={columns}
-        data={!isCity ? props.provincesFilter : props.searchCities?.length ? props.searchCities : props.citiesFilterFromProvinces}
+        data={!isCity ? props.provincesFilter : props.searchCities}
         loading={load}
         pagination={{
           defaultPageSize: 10,
@@ -142,8 +143,8 @@ const mapStateToProps = (state) => {
   return {
     provinces: state.provinces,
     provincesFilter: state.provincesFilter,
-    citiesFilterFromProvinces: state.citiesFilterFromProvinces,
     cities: state.cities,
+    citiesFilterFromProvinces: state.citiesFilterFromProvinces,
     searchCities: state.searchCities,
   };
 };
